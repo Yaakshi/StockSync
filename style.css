@@ -145,5 +145,9 @@ button:hover {
 .register {
   text-align: center;
   margin-top: 30px;
-  color: #fff;
+  color: #000;
+}
+
+.register a{
+  color: white;
 }
