@@ -1,45 +1,48 @@
-<?php 
+<?php
 
 session_start();
 
-$error_message='';
-
 if(isset($_SESSION['user_id'])) header('location: dashboard.php');
+
+$error_message='';
 
 if($_POST){
 
-  include('database/connection.php');
+  include("database/connection.php");
 
-  $fullname=$_POST['fullname'];
-  $mobile=$_POST['mobile'];
-  $email=$_POST['email'];
-  $password=$_POST['pwd'];
-  // $encrypted=password_hash($password, PASSWORD_DEFAULT);
+  $fullname = $_POST['fullname'];
+  $mobile = $_POST['mobile'];
+  $email = $_POST['email'];
+  $password = $_POST['pwd'];
+  $confirmpwd = $_POST['confirmpwd'];
 
-  $query = "INSERT INTO users (fullname, mobile, email, pwd) VALUES (?, ?, ?, ?);";
+  if ($password === $confirmpwd) {
 
+  $query = "INSERT INTO users (fullname, mobile, email, pwd) VALUES (?, ?, ?, ?)";
   $stmt = $conn->prepare($query);
 
   $stmt->bind_param("ssss", $fullname, $mobile, $email, $password);
 
-
-  if($password === $_POST['confirmpwd'])
-    {
-      $stmt->execute();
+  if ($stmt->execute()) {
+    echo "<script>
+          alert('Registration successful! You will now be redirected to the login page.');
+          window.location.href = 'login.php';
+          </script>";
     }
-  else
-  {
-    $error_message="Passwords do not match!";
-  }
+    else {
+            $error_message="Passwords do not match!";
+            exit();
+        }
 
+    $stmt->close();
+    $conn->close();
 
-  $stmt->close();
-  $conn->close();
-
-  header('Location: login.php');
+}
+else{
+  $error_message="Passwords do not match!";
+}
 }
 ?>
-
 
 <!DOCTYPE html>
 <html>

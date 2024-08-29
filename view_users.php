@@ -4,6 +4,17 @@ session_start();
 
 $error_message='';
 
+if (!isset($_SESSION['user_role'])) {
+    header("Location: login.php");
+    exit();
+}
+
+else if ($_SESSION['user_role'] !== 'admin') {
+    // Redirect to the dashboard with an alert message in the URL
+    header("Location: dashboard.php?alert=unauthorized");
+    exit();
+}
+
 include("database/connection.php");
 
 $query = "SELECT id, fullname, mobile, email FROM users;";
@@ -12,6 +23,7 @@ $stmt = $conn->prepare($query);
 $stmt->execute();
 
 $result = $stmt->get_result();
+
 
 ?>
 
@@ -24,6 +36,11 @@ $result = $stmt->get_result();
 	<link rel="stylesheet" type="text/css" href="view_users.css">
 </head>
 <body>
+    <?php if ($error_message): ?>
+        <script type="text/javascript">
+            alert("<?php echo addslashes($error_message); ?>");
+        </script>
+  <?php endif; ?>
     
 <div class="container"><br><br>
         <?php 
