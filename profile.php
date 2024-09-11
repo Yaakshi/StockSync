@@ -4,6 +4,7 @@ session_start();
 
 $error_message='';
 
+$user['id'] = $_SESSION['user_id'];
 $user['fullname'] = $_SESSION['user_name'];
 $user['email'] = $_SESSION['user_email'];
 $user['mobile']=$_SESSION['mobile'];
