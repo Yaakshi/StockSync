@@ -48,7 +48,7 @@ if ($_POST)
     }
     else
     {
-        $error_message = "Sorry, only JPG, JPEG, PNG, and GIF files are allowed.";
+        $error_message = "Sorry, only JPG, JPEG, PNG files are allowed.";
     }
   }
   $error_message = "An error occurred during the file upload.";
