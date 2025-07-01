@@ -62,7 +62,7 @@ else{
     <a href="index.php">
     <h1>StockSync</h1>
     </a>
-    <form action="signup.php" method="POST">
+    <form id="signup" action="signup.php" method="POST">
       <h2>Sign up</h2>
       <div class="input-field">
         <input name='fullname' id='fullname' type="text" required>
@@ -91,4 +91,5 @@ else{
     </form>
   </div>
 </body>
+<script type="module" src="js/auth-signup.js"></script>
 </html>

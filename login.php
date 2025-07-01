@@ -76,7 +76,7 @@ if($_POST){
     header('Location: dashboard.php');
   }
   else {
-      $error_message = "Invalid username/email or password.";
+      $error_message = "Login failed.";
   }
   $stmt->close();
   $conn->close();
@@ -101,7 +101,7 @@ if($_POST){
     <a href="index.php">
     <h1>StockSync</h1>
     </a>
-    <form action="login.php" method="POST">
+    <form id="login" action="login.php" method="POST">
       <h2>Log in</h2>
         <div class="input-field">
         <input name="usernameemail" id="usernameemail" type="text" required>
@@ -122,4 +122,5 @@ if($_POST){
     </form>
   </div>
 </body>
+<script type="module" src="js/auth-login.js"></script>
 </html>
