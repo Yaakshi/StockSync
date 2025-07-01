@@ -141,7 +141,7 @@ body {
       right: 1350px;"><h3><?= $user['fullname']?></h3></button>
     <a href="profile.php"><button class="logout-button" style=" top: 10px;
       right: 135px;">Profile</button></a>
-    <a href="database/logout.php"><button class="logout-button" onclick="logout()">Logout</button></a>
+    <a href="logout.php"><button class="logout-button" onclick="logout()">Logout</button></a>
   </div>
 
 

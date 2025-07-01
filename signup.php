@@ -24,12 +24,14 @@ if($_POST){
     'email' => $email,
     'emailVerified' => false,
     'password' => $password,
-    'displayName' => 'John Doe',
     ];
     
     $createdUser = $auth->createUser($userProperties);
 
+    $ref_table = $_ENV['USER_TABLE'];
+
     if($createdUser){
+      $postRef = $database->getReference($ref_table)->push($userProperties);
       echo "<script>
       alert('Registration successful! You will now be redirected to the login page.');
       window.location.href = 'login.php';

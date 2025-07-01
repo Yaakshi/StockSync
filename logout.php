@@ -1,12 +1,12 @@
 <?php
 
-include("connection.php");
+include("dbcon.php");
 
 session_start();
 
 echo "<script>
       alert('Logout successful!');
-      window.location.href = '../index.php';
+      window.location.href = 'index.php';
       </script>";
 
 session_unset();
