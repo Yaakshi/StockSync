@@ -1,85 +1,45 @@
 <?php
 
+use Firebase\Auth\Token\Exception\InvalidToken;
+
 session_start();
 
-if(isset($_SESSION['user_id'])) header('location: dashboard.php');
+if(isset($_SESSION['user_id'])) header('location: dash.php');
 
-include("database/connection.php");
+include("dbcon.php");
 
 $error_message='';
-
-
-if (isset($_COOKIE['remember_me']))
-  {
-    $token = $_COOKIE['remember_me'];
-    $query="SELECT user_id FROM user_tokens WHERE token = ?;";
-    $stmt=$conn->prepare($query);
-    $stmt->bind_param("s", $token);
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0){
-
-    $allRows = $result->fetch_all(MYSQLI_ASSOC);
-    $user = $allRows[0];
-
-    $_SESSION['user_id'] = $user['user_id'];
-  }
-  else {
-        setcookie('remember_me', $token, time() - 3600, '/', 'localhost', true, true, ['samesite' => 'Lax']);
-    }
-
-}
 
 if($_POST){
 
   $usernameemail = $_POST['usernameemail'];
   $password = $_POST['password'];
 
-  $query = "SELECT * FROM users WHERE email = ? AND pwd = ?;";
-  $stmt = $conn->prepare($query);
+  try {
+    $user = $auth->getUserByEmail( "$usernameemail" );
 
-  $stmt->bind_param("ss", $usernameemail, $password);
+    $signInResult = $auth->signInWithEmailAndPassword($usernameemail, $password);
+    $idTokenString = $signInResult->idToken();
 
-  $stmt->execute();
+    try {
+      $verifiedIdToken = $auth->verifyIdToken($idTokenString);
+      $uid = $signInResult->firebaseUserId();
 
-  $result = $stmt->get_result();
+      $_SESSION['user_id'] = $uid  ;
+      $_SESSION['idTokenString'] = $idTokenString;
 
-  if ($result->num_rows > 0) {
+      echo "<script>
+      alert('Login successful!');
+      window.location.href = 'dash.php';
+      </script>";
 
-    $allRows = $result->fetch_all(MYSQLI_ASSOC);
-    $user = $allRows[0];
-
-    $_SESSION['user_id'] = $user['id'];
-    $_SESSION['user_name'] = $user['fullname'];
-    $_SESSION['user_email'] = $user['email'];
-    $_SESSION['mobile'] = $user['mobile'];
-    $_SESSION['profile_photo'] = $user['profile_photo'];
-    $_SESSION['user_role'] = $user['user_role'];
-
-
-    if (isset($_POST['remember_me'])) {
-      $token = bin2hex(random_bytes(16));
-      // $expiresAt = date('Y-m-d H:i:s', time() + (1 * 60 * 60));
-
-      $query="INSERT INTO user_tokens (user_id, token, expires_at) VALUES (?, ?, NOW() + INTERVAL 1 HOUR);";
-      $stmt = $conn->prepare($query);
-      $stmt->bind_param("is", $_SESSION['user_id'], $token);
-
-      $stmt->execute();
-
-      setcookie('remember_me', $token, time() + (30 * 24 * 60 * 60), "/", "localhost", true, true);
-
-      }
-
-    header('Location: dashboard.php');
+    } catch (InvalidToken $e) {
+      echo 'The token is invalid: '.$e->getMessage();
+    }
   }
-  else {
-      $error_message = "Login failed.";
+  catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
+    $error_message = "Login failed.";
   }
-  $stmt->close();
-  $conn->close();
 }
 ?>
 
@@ -110,11 +70,7 @@ if($_POST){
       <div class="input-field">
         <input name="password" id="password" type="password" required>
         <label>Enter your password</label>
-      </div>
-      <div>
-        <input type="checkbox" id="remember_me" name="remember_me">
-        <label style="color: white;">Remember Me</label>
-    </div><br>
+      </div><br>
       <button type="submit">Log In</button>
       <div class="register">
         <p>Don't have an account? <a href="signup.php">Sign up</a></p>
@@ -122,5 +78,4 @@ if($_POST){
     </form>
   </div>
 </body>
-<script type="module" src="js/auth-login.js"></script>
 </html>

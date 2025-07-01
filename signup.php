@@ -2,13 +2,13 @@
 
 session_start();
 
-if(isset($_SESSION['user_id'])) header('location: dashboard.php');
+if(isset($_SESSION['user_id'])) header('location: dash.php');
 
 $error_message='';
 
 if($_POST){
-
-  include("database/connection.php");
+  
+  include("dbcon.php");
 
   $fullname = $_POST['fullname'];
   $mobile = $_POST['mobile'];
@@ -17,30 +17,32 @@ if($_POST){
   $confirmpwd = $_POST['confirmpwd'];
 
   if ($password === $confirmpwd) {
+    
+    $userProperties = [
+    'fullname'=> $fullname,
+    'mobile' => $mobile,
+    'email' => $email,
+    'emailVerified' => false,
+    'password' => $password,
+    'displayName' => 'John Doe',
+    ];
+    
+    $createdUser = $auth->createUser($userProperties);
 
-  $query = "INSERT INTO users (fullname, mobile, email, pwd) VALUES (?, ?, ?, ?)";
-  $stmt = $conn->prepare($query);
-
-  $stmt->bind_param("ssss", $fullname, $mobile, $email, $password);
-
-  if ($stmt->execute()) {
-    echo "<script>
-          alert('Registration successful! You will now be redirected to the login page.');
-          window.location.href = 'login.php';
-          </script>";
+    if($createdUser){
+      echo "<script>
+      alert('Registration successful! You will now be redirected to the login page.');
+      window.location.href = 'login.php';
+      </script>";
     }
     else {
-            $error_message="Passwords do not match!";
-            exit();
-        }
-
-    $stmt->close();
-    $conn->close();
-
+      $error_message="Registration failed! Try again!";
+      exit();
+    }
 }
-else{
-  $error_message="Passwords do not match!";
-}
+  else{
+    $error_message="Passwords do not match!";
+  }
 }
 ?>
 
@@ -91,5 +93,4 @@ else{
     </form>
   </div>
 </body>
-<script type="module" src="js/auth-signup.js"></script>
 </html>
