@@ -4,7 +4,7 @@ Web appliction built using HTML,CSS, JS, PHP and MySQL.
 ## Branches
 
 ### 1. main
-A web application to understand the concepts web application development and security.
+Understand the concepts web application development and security.
 - Authentication
 - Authorisation
 - Access controls
