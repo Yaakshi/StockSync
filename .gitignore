@@ -2,3 +2,5 @@ stocksync-20554-firebase-adminsdk-fbsvc-624d3ea583.json
 dbcon.php
 vendor/
 .env
+node_modules/
+pglite-debug.log

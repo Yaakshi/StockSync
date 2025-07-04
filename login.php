@@ -11,7 +11,7 @@ include("dbcon.php");
 $error_message='';
 
 if($_POST){
-
+  try{
   $usernameemail = $_POST['usernameemail'];
   $password = $_POST['password'];
 
@@ -40,6 +40,9 @@ if($_POST){
   catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
     $error_message = "Login failed.";
   }
+}catch(Exception $error_message){
+  $error_message = "Invalid Credentials. Try again!";
+}
 }
 ?>
 

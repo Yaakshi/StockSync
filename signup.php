@@ -7,6 +7,8 @@ if(isset($_SESSION['user_id'])) header('location: dash.php');
 $error_message='';
 
 if($_POST){
+
+  try{
   
   include("dbcon.php");
 
@@ -39,12 +41,14 @@ if($_POST){
     }
     else {
       $error_message="Registration failed! Try again!";
-      exit();
     }
 }
   else{
     $error_message="Passwords do not match!";
   }
+}catch(Exception $error_message) {
+  $error_message= "Email already exists or Password requirements not satisified. Try again!";
+}
 }
 ?>
 

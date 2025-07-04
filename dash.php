@@ -2,6 +2,8 @@
 
 session_start();
 
+include("dbcon.php");
+
 if(!isset($_SESSION['user_id'])) header('location: index.php');
 
 if (isset($_GET['alert']) && $_GET['alert'] === 'unauthorized') {
