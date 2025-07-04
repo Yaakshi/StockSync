@@ -3,13 +3,13 @@
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyByVjqlwwg5TcaVPk_j6n9crpi1NEzWLQ4",
-  authDomain: "stocksync-20554.firebaseapp.com",
-  databaseURL: "https://stocksync-20554-default-rtdb.firebaseio.com",
-  projectId: "stocksync-20554",
-  storageBucket: "stocksync-20554.firebasestorage.app",
-  messagingSenderId: "238345348111",
-  appId: "1:238345348111:web:25e40e1bbe988a8786af7a"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 
 // Initialize Firebase
